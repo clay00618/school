@@ -1,0 +1,66 @@
+.node_box{
+    margin-bottom: 8px;
+    margin-left: 20%;
+    margin-right: 20%;
+    background: #ffffff;
+}
+.panel-body .topic0{
+    width: 75%;
+    display: inline-block;
+}
+.panel-body .topic1{
+    width: 10%;
+    display: inline-block;
+}
+.hotTop{
+    width: 75%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.list-group li label span{
+    display: inline-block;
+    vertical-align: middle;
+}
+.list-group{
+    margin-top: -20px;
+}
+
+.list-group li .topic_user {
+    width: 10%;
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+
+}
+.list-group li .comment_num{
+    width: 12%;
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+}
+
+.list-group li .view{
+    width: 6%;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+
+}
+.pagination{
+    left: 40%;
+    position: absolute;
+}
+.hotTop .topic_title{
+    font-size: 14px;
+    width:81%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+    vertical-align: middle;
+}

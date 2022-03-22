@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人资料</title>
+    <script th:src="@{/static/jquery-3.4.1.js}" type="text/javascript"></script>
+    <script th:src="@{/static/js/bootstrap.min.js}"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.16.1/esm/popper.min.js" type="text/javascript"></script>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/static/favicon.ico}">
+    <link th:href="@{/static/css/font-awesome.min.css}" rel="stylesheet">
+    <style>
+        .list-group-item{
+            width: 60%;
+            margin-left: 20%;
+        }
+        .btn-group{
+            width: 60%;
+            margin-left: 20%;
+        }
+        .label-primary{
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body style="padding-top: 70px">
+    <!--导航栏-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">校园生活网</span>
+                </button>
+                <a class="navbar-brand" th:href="@{/index}">校园生活网</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/questionnaire}">问卷调查</a></li>
+                    <li><a th:href="@{/article}">失物招领</a></li>
+                    <li><a th:href="@{/activity}">校园活动</a></li>
+                    <li><a th:href="@{/node}">校园论坛</a></li>
+                    <li><a th:href="@{/confession}">表白墙</a></li>
+                    <li><a th:href="@{/advice}">举报和建议</a></li>
+                </ul>
+                <form class="navbar-form navbar-left" th:action="@{/search_everywhere}" method="get">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="搜索问题，话题" name="title">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right" th:switch="${session.user != null}">
+                    <li th:case="false">
+                        <a th:href="@{/login}">登录</a>
+                    </li>
+                    <li  th:case="true" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/message}">消息</a></li>
+                            <li><a th:href="@{/info}">个人资料</a></li>
+                            <li><a th:href="@{/my_submit}">我发布的</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a th:href="@{/logout}">退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>   <!--导航栏结束-->
+    <div class="page-header">
+        <h1>个人资料</h1>
+    </div>
+    <ul class="list-group" >
+        <li class="list-group-item">用户名:<span class="label label-primary" th:text="${user.getUser_name()}"></span></li>
+        <li class="list-group-item">性别：<span class="label label-primary" th:text="${user.getUser_sex()}"></span></li>
+        <li class="list-group-item">年龄：<span class="label label-primary" th:text="${user.getUser_age()}"></span></li>
+        <li class="list-group-item">学号：<span class="label label-primary" th:text="${user.getUser_student_num()}"></span></li>
+        <li class="list-group-item">昵称：<span class="label label-primary" th:text="${user.getUser_nickname()}"></span></li>
+        <li class="list-group-item">所在学校:<span class="label label-primary" th:text="${user.getUser_school()}"></span></li>
+        <li class="list-group-item">所在学院：<span class="label label-primary" th:text="${user.getUser_department()}"></span></li>
+        <li class="list-group-item">所在班级：<span class="label label-primary" th:text="${user.getUser_class()}"></span></li>
+        <li class="list-group-item">电话：<span class="label label-primary" th:text="${user.getUser_tel()}"></span></li>
+    </ul>
+    <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-default" th:onclick="edit_info([[${aaa}]])">编辑个人资料</button>
+    </div>
+
+    <script type="text/javascript">
+        function edit_info(aaa) {
+            window.location.href = "edit_info";
+        }
+    </script>
+</body>
+</html>

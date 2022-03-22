@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>校园生活网</title>
+    <script th:src="@{/static/jquery-3.4.1.js}" type="text/javascript"></script>
+    <script th:src="@{/static/js/bootstrap.min.js}" type="text/javascript"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.16.1/esm/popper.min.js" type="text/javascript"></script>
+    <link rel="icon" type="image/x-icon" th:href="@{/static/favicon.ico}" >
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/bootstrap-theme.min.css}" rel="stylesheet">
+    <link th:href="@{/static/css/font-awesome.min.css}" rel="stylesheet">
+    <style type="text/css">
+        .panel-default{
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+        a{
+            color: black;
+            text-decoration: none;
+        }
+    </style>
+
+
+
+</head>
+<body style="padding-top: 70px">
+
+
+<!--导航栏-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">校园生活网</span>
+            </button>
+            <a class="navbar-brand" th:href="@{/index}">校园生活网</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a th:href="@{/questionnaire}">问卷调查</a></li>
+                <li><a th:href="@{/article}">失物招领</a></li>
+                <li><a th:href="@{/activity}">校园活动</a></li>
+                <li><a th:href="@{/node}">校园论坛</a></li>
+                <li><a th:href="@{/confession}">表白墙</a></li>
+                <li><a th:href="@{/advice}">举报和建议</a></li>
+            </ul>
+            <form class="navbar-form navbar-left" th:action="@{/search_everywhere}" method="get">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="搜索问题，话题" name="title">
+                </div>
+                <button type="submit" class="btn btn-default" >搜索</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right" th:switch="${session.user != null}">
+                <li th:case="false">
+                    <a th:href="@{/login}">登录</a>
+                </li>
+                <li  th:case="true" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a th:href="@{/message}">消息</a></li>
+                        <li><a th:href="@{/info}">个人资料</a></li>
+                        <li><a th:href="@{/my_submit}">我发布的</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a th:href="@{/logout}">退出</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>   <!--导航栏结束-->
+
+    <div class="page-header">
+        <h1>校园新闻</h1>
+    </div>
+
+    <div class="panel panel-default" th:each="news : ${newsList}">
+        <div class="panel-heading" ><a th:text="${news.getNews_title()}" th:href="@{/news_content(title=${news.getNews_title()},id=${news.getNews_id()})}"></a></div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    function search_everywhere() {
+        alert("asdsadas");
+    }
+</script>
+
+
+</body>
+</html>

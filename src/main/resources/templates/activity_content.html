@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>活动内容</title>
+    <script th:src="@{/static/jquery-3.4.1.js}" type="text/javascript"></script>
+    <script th:src="@{/static/js/bootstrap.min.js}"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.16.1/esm/popper.min.js" type="text/javascript"></script>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/static/favicon.ico}">
+    <link th:href="@{/static/css/font-awesome.min.css}" rel="stylesheet">
+    <style>
+        .panel-default{
+            width: 80%;
+            margin-left: 10%;
+        }
+        a{
+            color: black;
+            text-decoration: none;
+        }
+        .label-default{
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body style="padding-top: 70px">
+    <!--导航栏-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">校园生活网</span>
+                </button>
+                <a class="navbar-brand" th:href="@{/index}">校园生活网</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/questionnaire}">问卷调查</a></li>
+                    <li><a th:href="@{/article}">失物招领</a></li>
+                    <li><a th:href="@{/activity}">校园活动</a></li>
+                    <li><a th:href="@{/node}">校园论坛</a></li>
+                    <li><a th:href="@{/confession}">表白墙</a></li>
+                    <li><a th:href="@{/advice}">举报和建议</a></li>
+                </ul>
+                <form class="navbar-form navbar-left" th:action="@{/search_everywhere}" method="get">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="搜索问题，话题" name="title">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+                <ul class="nav navbar-nav">
+                    <!-- <li><a href="#">排行榜</a></li>-->
+                    <li><a th:href="@{/activity_join(activity_id=${activity.getActivity_id()})}" target="_blank">参加活动</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" th:switch="${session.user != null}">
+                    <li th:case="false">
+                        <a th:href="@{/login}">登录</a>
+                    </li>
+                    <li  th:case="true" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/message}">消息</a></li>
+                            <li><a th:href="@{/info}">个人资料</a></li>
+                            <li><a th:href="@{/my_submit}">我发布的</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a th:href="@{/logout}">退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>   <!--导航栏结束-->
+
+
+    <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error !=null}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong  th:text="${error}"></strong>
+    </div>
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading" th:text="${activity.getActivity_name()}"></div>
+        <div class="panel-body">
+            <p th:text="${activity.getActivity_explain()}"></p>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span class="label label-default">活动地点:</span>
+                <p th:text="${activity.getActivity_address()}"></p>
+            </li>
+            <li class="list-group-item">
+                <span class="label label-default">活动要求:</span>
+                <p th:text="${activity.getActivity_require()}"></p>
+            </li>
+            <li class="list-group-item">
+                <span class="label label-default">活动说明:</span>
+                <p th:text="${activity.getActivity_explain()}"></p>
+            </li>
+            <li class="list-group-item">
+                <span class="label label-default">活动报名人员:</span>
+                <p th:text="${attend}"></p>
+            </li>
+        </ul>
+
+        <!-- Table -->
+<!--        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>用户名</th>
+                <th>联系方式</th>
+                <th>班级</th>
+            </tr>
+            </thead>
+            <tbody th:each="user : ${userList}">
+            <tr>
+                <th th:text="${userStat.count}"></th>
+                <td th:text="${user.getUser_name()}"></td>
+                <td th:text="${user.getUser_tel()}"></td>
+                <td th:text="${user.getUser_class()}"></td>
+            </tr>
+            </tbody>
+        </table>-->
+    </div>
+</body>
+</html>

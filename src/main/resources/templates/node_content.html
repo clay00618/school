@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>帖子内容页面</title>
+    <script th:src="@{/static/jquery-3.4.1.js}" type="text/javascript"></script>
+    <script th:src="@{/static/js/bootstrap.min.js}"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.16.1/esm/popper.min.js" type="text/javascript"></script>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/bootstrap-theme.min.css}" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" th:href="@{/static/favicon.ico}">
+    <link th:href="@{/static/css/font-awesome.min.css}" rel="stylesheet">
+
+    <style>
+        .content-review{
+            bottom: 0;
+            margin-left: 20%;
+            width: 60%;
+        }
+        .panel.panel-default{
+            margin-left: 20%;
+            width: 60%;
+        }
+        .label-default{
+            font-size: 14px;
+        }
+        .toolbar {
+            border: 1px solid #ccc;
+        }
+        .text{
+            border: 1px solid #ccc;
+        }
+        /* 帖子内容div样式 */
+        .topic-content{
+            width: 100%;
+            margin-left: 0;
+            border: 1px solid #ccc;
+            word-wrap: break-word;
+            word-break: break-all;
+            overflow: hidden;
+        }
+        /* 回复帖子内容div样式 */
+        .review-content{
+            width: 100%;
+            border: 1px solid #ccc;
+            overflow: hidden;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+        /* table 样式 */
+        table {
+            border-top: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+        }
+        table td,
+        table th {
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            padding: 3px 5px;
+        }
+        table th {
+            border-bottom: 2px solid #ccc;
+            text-align: center;
+        }
+
+        /* blockquote 样式 */
+        blockquote {
+            display: block;
+            border-left: 8px solid #d0e5f2;
+            padding: 5px 10px;
+            margin: 10px 0;
+            line-height: 1.4;
+            font-size: 100%;
+            background-color: #f1f1f1;
+        }
+
+        /* code 样式 */
+        code {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            background-color: #f1f1f1;
+            border-radius: 3px;
+            padding: 3px 5px;
+            margin: 0 3px;
+        }
+        pre code {
+            display: block;
+        }
+
+        /* ul ol 样式 */
+        ul, ol {
+            margin: 0 0 0 0;
+        }
+    </style>
+</head>
+<body style="padding-top: 70px">
+    <!--导航栏-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">校园生活网</span>
+                </button>
+                <a class="navbar-brand" th:href="@{/index}">校园生活网</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/questionnaire}">问卷调查</a></li>
+                    <li><a th:href="@{/article}">失物招领</a></li>
+                    <li><a th:href="@{/activity}">校园活动</a></li>
+                    <li><a th:href="@{/node}">校园论坛</a></li>
+                    <li><a th:href="@{/confession}">表白墙</a></li>
+                    <li><a th:href="@{/advice}">举报和建议</a></li>
+                </ul>
+                <form class="navbar-form navbar-left" th:action="@{/search_everywhere}" method="get">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="搜索问题，话题" name="title">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+                <ul class="nav navbar-nav">
+                    <li><a  class="menu-review" onclick="document.getElementById('div2').scrollIntoView()">回复</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" th:switch="${session.user != null}">
+                    <li th:case="false">
+                        <a th:href="@{/login}">登录</a>
+                    </li>
+                    <li  th:case="true" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/message}">消息</a></li>
+                            <li><a th:href="@{/info}">个人资料</a></li>
+                            <li><a th:href="@{/my_submit}">我发布的</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a th:href="@{/logout}">退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>   <!--导航栏结束-->
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title" th:text="${node.getTopic_name()}"></h3>
+        </div>
+        <div class="panel-body">
+            <span class="label label-default" th:text="'发布人：'+${username}"></span>
+            <span class="label label-default" th:text="'发布时间：'+${node.getTopic_time()}"></span>
+            <input type="hidden" th:value="${node.getTopic_id()}"  id="topic_id"/>
+        </div>
+        <div id="text1" class="topic-content"  th:utext="${node.getTopic_content()}"></div>
+    </div>
+
+
+    <div class="panel panel-default" th:switch="${reviews.size() != 0}">
+        <div class="panel-heading">
+            <h3 class="panel-title">评论区</h3>
+        </div>
+        <ul class="list-group" th:case="true">
+            <li class="list-group-item"    th:each="review : ${reviews}" th:item-index="reviewStat.count">
+                <span class="label label-default" th:text="'回复人：'+${nameList.get(reviewStat.index)}"></span>
+                <span class="label label-default" th:text="'发布时间：'+${review.getTopic_review_time()}"></span>
+                <div id="review-text" class="review-content"  th:utext="${review.getTopic_review_content()}"></div>
+            </li>
+        </ul>
+        <ul class="list-group" th:case="false">
+            <li   class="list-group-item" >
+                <span class="label label-default">暂无评论</span>
+            </li>
+        </ul>
+    </div>
+
+    <!--提交回复编辑框-->
+    <div class="content-review">
+        <div class="editor">
+            <div id="div1" class="toolbar"></div>
+            <div id="div2" class="text"> <!--可使用 min-height 实现编辑区域自动增加高度-->
+            </div>
+        </div>
+        <div class="btn-group" role="group" aria-label="...">
+            <button type="button" class="btn btn-primary" id="submit">提交回复</button>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript" th:src="@{/static/js/wangEditor.js}"></script>
+    <script type="text/javascript">
+        var E = window.wangEditor;
+        var editor = new E('#div1','#div2');
+        // 或者 var editor = new E( document.getElementById('editor') )
+        editor.create();
+        //editor.txt.html('<p>请输入内容</p>');
+
+        $(document).ready(function () {
+            $("#submit").click(function () {
+                //获取评论帖子发布时间
+                var nowTime = getFormatDate();
+                function getFormatDate() {
+                    var nowDate = new Date();
+                    var year = nowDate.getFullYear();
+                    var month = nowDate.getMonth() + 1 < 10 ? "0" + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
+                    var date = nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate();
+                    var hour = nowDate.getHours()< 10 ? "0" + nowDate.getHours() : nowDate.getHours();
+                    var minute = nowDate.getMinutes()< 10 ? "0" + nowDate.getMinutes() : nowDate.getMinutes();
+                    var second = nowDate.getSeconds()< 10 ? "0" + nowDate.getSeconds() : nowDate.getSeconds();
+                    return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
+                }
+
+                var  params = {};
+                //获取帖子内容的html格式
+                params.content = editor.txt.html();
+                //系统当前时间
+                params.time = nowTime;
+                //当前回复的帖子的ID
+                params.node_id = $("#topic_id").val();
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: "http://localhost:8081/school/review",
+                    data: params,
+                    dataType: "json",
+                    success:function (data) {
+                        if (data.result=='SUCCESS'){
+                            alert("评论成功");
+                            //传入帖子ID
+                            var node_id = $("#topic_id").val();
+                            window.location.href = "ajax_review?node_id=" + node_id;
+                        }else {
+                            alert("传值失败,失败原因："+data);
+                        }
+                    },
+                    error:function (data) {
+                        alert(data.result);
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>

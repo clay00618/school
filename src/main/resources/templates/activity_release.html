@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>发布活动</title>
+    <script th:src="@{/static/jquery-3.4.1.js}" type="text/javascript"></script>
+    <script th:src="@{/static/js/bootstrap.min.js}"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.16.1/esm/popper.min.js" type="text/javascript"></script>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <script th:src="@{/static/js/moment-with-locales.min.js}" type="text/javascript"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <link rel="icon" type="image/x-icon" th:href="@{/static/favicon.ico}">
+    <link th:href="@{/static/css/font-awesome.min.css}" rel="stylesheet">
+    <style>
+        .input-group{
+            width: 80%;
+            margin-left: 10%;
+        }
+        .col-sm-6{
+            margin-left: 10%;
+            width: 400px;
+        }
+        .la{
+            margin-top: 20px;
+        }
+        #datetimepicker1{
+            margin-left: -4px;
+        }
+        #datetimepicker2{
+            margin-left: -4px;
+        }
+        #datetimepicker3{
+            margin-left: -4px;
+        }
+        #activity-explain{
+            width: 80%;
+            margin-left: 10%;
+        }
+        #activity-number{
+            margin-top: 20px;
+        }
+        #activity-submit{
+            margin-left: 10%;
+        }
+    </style>
+</head>
+<body style="padding-top: 70px">
+    <!--导航栏-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">校园生活网</span>
+                </button>
+                <a class="navbar-brand" th:href="@{/index}">校园生活网</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/questionnaire}">问卷调查</a></li>
+                    <li><a th:href="@{/article}">失物招领</a></li>
+                    <li><a th:href="@{/activity}">校园活动</a></li>
+                    <li><a th:href="@{/node}">校园论坛</a></li>
+                    <li><a th:href="@{/confession}">表白墙</a></li>
+                    <li><a th:href="@{/advice}">举报和建议</a></li>
+                </ul>
+                <form class="navbar-form navbar-left" th:action="@{/search_everywhere}" method="get">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="搜索问题，话题" name="title">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right" th:switch="${session.user != null}">
+                    <li th:case="false">
+                        <a th:href="@{/login}">登录</a>
+                    </li>
+                    <li  th:case="true" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/message}">消息</a></li>
+                            <li><a th:href="@{/info}">个人资料</a></li>
+                            <li><a th:href="@{/my_submit}">我发布的</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a th:href="@{/logout}">退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>   <!--导航栏结束-->
+
+    <form th:action="@{/save_activity}" id="edit" >
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">活动名称</span>
+            <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" name="activity-name">
+        </div>
+
+        <div class="row">
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    <label class="la">活动报名开始时间：</label>
+                    <!--指定 date标记-->
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control"  name="activity-start-time"/>
+                        <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    <label class="la">活动报名结束时间：</label>
+                    <!--指定 date标记-->
+                    <div class='input-group date' id='datetimepicker2'>
+                        <input type='text' class="form-control" name="activity-end-time"/>
+                        <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <span class="input-group-addon" >活动地点</span>
+            <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" name="activity-address">
+        </div>
+
+        <div class="input-group" id="activity-number">
+            <span class="input-group-addon" >活动要求</span>
+            <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" name="activity-require">
+        </div>
+
+        <div class="row">
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    <label class="la">活动开始时间:</label>
+                    <!--指定 date标记-->
+                    <div class='input-group date' id='datetimepicker3'>
+                        <input type='text' class="form-control" name="activity-time"/>
+                        <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="activity-explain">
+            <label class="la">活动说明</label>
+            <textarea class="form-control" rows="3" name="activity-explain"></textarea>
+        </div>
+        <div class="form-group" id="activity-submit">
+            <button type="submit" class="btn btn-default">提交</button>
+        </div>
+
+    </form>
+<script type="text/javascript">
+    $(function () {
+        var picker1 = $('#datetimepicker1').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+            locale: moment.locale('zh-cn'),
+            //minDate: '2016-7-1'
+        });
+        var picker2 = $('#datetimepicker2').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+            locale: moment.locale('zh-cn')
+        });
+        var picker3 = $('#datetimepicker3').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+            locale: moment.locale('zh-cn')
+        });
+        //动态设置最小值
+        picker1.on('dp.change', function(e) {
+            picker2.data('DateTimePicker').minDate(e.date);
+        });
+        //动态设置最大值
+        picker2.on('dp.change', function(e) {
+            picker1.data('DateTimePicker').maxDate(e.date);
+        });
+    });
+
+</script>
+
+</body>
+</html>

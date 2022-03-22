@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我发布的帖子</title>
+    <script th:src="@{/static/jquery-3.4.1.js}" type="text/javascript"></script>
+    <script th:src="@{/static/js/bootstrap.min.js}"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.16.1/esm/popper.min.js" type="text/javascript"></script>
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/static/favicon.ico}">
+    <link th:href="@{/static/css/font-awesome.min.css}" rel="stylesheet">
+    <style>
+        .news-nav{
+            position: relative;
+            top: -19px;
+            left: 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            height: 36px;
+        }
+    </style>
+</head>
+<body style="padding-top: 70px">
+    <!--导航栏-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">校园生活网</span>
+                </button>
+                <a class="navbar-brand" th:href="@{/index}">校园生活网</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/questionnaire}">问卷调查</a></li>
+                    <li><a th:href="@{/article}">失物招领</a></li>
+                    <li><a th:href="@{/activity}">校园活动</a></li>
+                    <li><a th:href="@{/node}">校园论坛</a></li>
+                    <li><a th:href="@{/confession}">表白墙</a></li>
+                    <li><a th:href="@{/advice}">举报和建议</a></li>
+                </ul>
+                <form class="navbar-form navbar-left" th:action="@{/search_everywhere}" method="get">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="搜索问题，话题" name="title">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right" th:switch="${session.user != null}">
+                    <li th:case="false">
+                        <a th:href="@{/login}">登录</a>
+                    </li>
+                    <li  th:case="true" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/message}">消息</a></li>
+                            <li><a th:href="@{/info}">个人资料</a></li>
+                            <li><a th:href="@{/my_submit}">我发布的</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a th:href="@{/logout}">退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>   <!--导航栏结束-->
+    <!--发布的帖子和实物招领，帖子包括标题和内容-->
+
+
+
+    <div class="news-nav">
+        <div class="container">
+            <a th:href="@{/my_submit}" class="btn btn-default" role="button">我发布的帖子</a>
+            <a th:href="@{/my_submit_article}" class="btn btn-default" role="button">我发布的失物招领</a>
+            <a th:href="@{/my_submit_advice}" class="btn btn-default" role="button">我发布的举报和建议信息</a>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <h1>我发布的帖子：</h1>
+    </div>
+    <div class="panel-default" th:if="${nodeList.size() == 0 && confessionList.size() == 0}">
+        <p>暂无发布的帖子</p>
+    </div>
+    <div class="panel panel-default" th:each="node : ${nodeList}" th:item-index="nodeStat.count">
+        <div class="panel-heading">
+            <h3 class="panel-title" th:text="${node.getTopic_name()}"></h3>
+            <span class="label label-default" th:text="'发布时间：'+${node.getTopic_time()}"></span>
+        </div>
+        <div class="panel-body" th:utext="${node.getTopic_content()}">
+        </div>
+    </div>
+    <div class="panel panel-default" th:each="confession : ${confessionList}" th:item-index="confessionStat.count">
+        <div class="panel-heading">
+            <h3 class="panel-title" th:text="'发布时间：'+${confession.getConfession_time()}"></h3>
+        </div>
+        <div class="panel-body" th:utext="${confession.getConfession_content()}">
+        </div>
+    </div>
+
+</body>
+</html>

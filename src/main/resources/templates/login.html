@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/static/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/login.css}" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" th:href="@{/static/favicon.ico}" >
+    <title>登录</title>
+</head>
+<body>
+
+
+<div class="form-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6">
+                <form class="form-horizontal" th:action="@{/user}" th:method="post">
+                    <div class="heading">校园生活网</div>
+                    <div class="heading">登录</div>
+                    <div class="form-group">
+                        <i class="fa fa-user"></i><input required="" name="stu_num" type="tel" class="form-control" placeholder="请输入学号" id="name">
+                    </div>
+                    <div class="form-group">
+                        <i class="fa fa-lock"></i><input required="" name="login_password" type="password" class="form-control" placeholder="初始密码为学号">
+                    </div>
+                    <div th:if="${pw != null}">
+                        <div class="alert alert-danger" role="alert">密码错误!</div>
+                    </div>
+                    <div th:if="${stu != null}">
+                        <div class="alert alert-danger" role="alert">请输入有效的学号！</div>
+                    </div>
+                    <div th:if="${exist != null}">
+                        <div class="alert alert-danger" role="alert">账号不存在，请先注册！</div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-arrow-right">Go</i></button>
+                          <span><a th:href="@{/modify_password}" class="create_account">修改密码</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <span><a th:href="@{/stu_register}" class="create_account">注册</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
